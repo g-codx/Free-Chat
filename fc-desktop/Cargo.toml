@@ -1,0 +1,19 @@
+[package]
+name = "fc-desktop"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+eframe = "0.23.0"
+egui_extras = "0.23.0"
+
+thiserror = { workspace = true }
+log = { workspace = true }
+pretty_env_logger = { workspace = true }
+
+fc-command = { path = "../fc-command" }
+
+[[bin]]
+name = "client"
+path = "src/bin/client.rs"
