@@ -1,12 +1,12 @@
-use crate::util::server::full;
+use crate::http::api;
 use crate::BoxBody;
 use hyper::{Request, Response};
 use sqlx::SqlitePool;
 use std::sync::Arc;
 
-pub fn http_handler(
-    _req: Request<hyper::body::Incoming>,
+pub async fn http_handler(
+    req: Request<hyper::body::Incoming>,
     pool: Arc<SqlitePool>,
 ) -> crate::Result<Response<BoxBody>> {
-    Ok(Response::new(full("Hello world")))
+    api::handler(req, pool).await
 }

@@ -29,4 +29,15 @@ impl Message {
 
         Ok(id)
     }
+
+    pub async fn find_by_room_id(room_id: i64, pool: &SqlitePool) -> anyhow::Result<Vec<Message>> {
+        let messages = sqlx::query_as(
+            "select id, user_id, room_id, content, creat_at from message where room_id = ?",
+        )
+        .bind(room_id)
+        .fetch_all(pool)
+        .await?;
+
+        Ok(messages)
+    }
 }

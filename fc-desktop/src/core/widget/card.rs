@@ -1,3 +1,4 @@
+use crate::http::model::Room;
 use eframe::egui::{Id, Response, RichText, Sense, Ui, Widget};
 use egui_extras::{Size, StripBuilder};
 use std::path::PathBuf;
@@ -7,6 +8,17 @@ pub struct Card {
     name: String,
     content: String,
     logo: PathBuf,
+}
+
+impl From<Room> for Card {
+    fn from(value: Room) -> Self {
+        Self {
+            id: Id::new(value.id),
+            name: value.name,
+            content: value.last_message,
+            logo: PathBuf::default(),
+        }
+    }
 }
 
 impl Card {

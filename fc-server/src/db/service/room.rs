@@ -5,14 +5,15 @@ use crate::Rooms;
 use anyhow::Error;
 use sqlx::SqlitePool;
 use std::collections::{HashMap, HashSet};
+use std::sync::Arc;
 use tokio::sync::RwLock;
 
 pub async fn create_room(name: String, user_id: i64, pool: &SqlitePool) -> anyhow::Result<i64> {
     Room::insert(name, user_id.to_string(), pool).await
 }
 
-pub async fn get_all_rooms_map(pool: &SqlitePool) -> anyhow::Result<Rooms> {
-    let rooms = Room::find_all(pool).await?;
+pub async fn get_all_rooms_map(pool: Arc<SqlitePool>) -> anyhow::Result<Rooms> {
+    let rooms = Room::find_all(&pool).await?;
     let mut rooms_map = HashMap::with_capacity(rooms.len());
 
     for room in rooms {
@@ -30,7 +31,7 @@ pub async fn get_all_rooms_map(pool: &SqlitePool) -> anyhow::Result<Rooms> {
 
 pub async fn add_user_to_room(room_id: i64, user_id: i64, pool: &SqlitePool) -> anyhow::Result<()> {
     match Room::find_by_id(room_id, pool).await? {
-        None => return Err(Error::from(error::Error::RoomNotFound { room_id })),
+        None => Err(Error::from(error::Error::RoomNotFound { room_id })),
         Some(room) => {
             let mut user_ids = if room.user_ids.is_empty() {
                 Vec::with_capacity(1)

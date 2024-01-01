@@ -1,6 +1,7 @@
+use serde::{Deserialize, Serialize};
 use sqlx::{FromRow, SqlitePool};
 
-#[derive(FromRow, Clone, Debug)]
+#[derive(Serialize, FromRow, Clone, Debug)]
 pub struct Room {
     pub id: i64,
     pub name: String,

@@ -4,9 +4,12 @@ use sqlx::SqlitePool;
 //https://blog.logrocket.com/real-time-chat-app-rust-react/
 
 //cargo install sqlx-cli
+
+//cd server
 //sqlx db create --database-url sqlite://fc.db
 //sqlx migrate run --database-url sqlite://fc.db
 
+//*** create new migration
 //sqlx migrate add users
 
 const DB_URL: &str = "sqlite://fc-server/fc.db";

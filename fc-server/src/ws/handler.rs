@@ -21,8 +21,6 @@ use tokio_tungstenite::{
     WebSocketStream,
 };
 
-//https://blog.logrocket.com/real-time-chat-app-rust-react/
-
 pub async fn ws_handler(
     req: Request<hyper::body::Incoming>,
     peer_addr: SocketAddr,
@@ -32,11 +30,7 @@ pub async fn ws_handler(
 ) -> crate::Result<Response<BoxBody>> {
     let path = req.uri().path();
 
-    //Сейчас это затычка под авторизацию
-    //Авторизацию должна происходить по токену.
-    //Когда юзер авторизуется по паролю в бд, ему генериться токен.
-    //токен помещается в редис и имеет определенное время жизни
-    //как будет проиходить проверка жизни пока неизвестно
+    //it has to be jwt
     let user_id = match path.chars().last().filter(|l| l.is_numeric()) {
         None => {
             log::info!("HTTP 400 Bad request");

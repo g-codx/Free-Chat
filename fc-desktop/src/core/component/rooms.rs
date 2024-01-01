@@ -1,14 +1,21 @@
 use crate::core::component::Component;
 use crate::core::widget::card::Card;
-use eframe::egui;
-use eframe::egui::{
-    Color32, Context, Id, RichText, Rounding, ScrollArea, Sense, SidePanel, Stroke, Ui,
-};
-use egui_extras::{Column, Size, StripBuilder, TableBuilder};
+use crate::http;
+use crate::http::model::Room;
+use eframe::egui::{Context, Id, ScrollArea, SidePanel};
 use std::path::PathBuf;
 
-#[derive(Default)]
-pub struct Rooms;
+pub struct Rooms {
+    rooms: Vec<Room>,
+}
+
+impl Default for Rooms {
+    fn default() -> Self {
+        Self {
+            rooms: get_rooms_request(),
+        }
+    }
+}
 
 impl Component for Rooms {
     fn show(&mut self, ctx: &Context) {
@@ -18,18 +25,25 @@ impl Component for Rooms {
             .resizable(false)
             .show(ctx, |ui| {
                 ScrollArea::vertical().show(ui, |ui| {
-                    for i in 0..25 {
-                        ui.add(Card::new(Id::new(i), name(), content(), PathBuf::default()));
+                    for r in &self.rooms {
+                        ui.add(Card::new(
+                            Id::new(r.id),
+                            r.name.clone(),
+                            r.last_message.clone(),
+                            PathBuf::default(),
+                        ));
                     }
                 });
             });
     }
 }
 
-fn name() -> String {
-    "TEXT TEXT TEXT TEXT text text text text".to_string()
-}
-
-fn content() -> String {
-    "TEXT TEXT TEXT TEXT text text text text TEXT TEXT TEXT TEXT text text text text TEXT TEXT TEXT TEXT text text text text TEXT TEXT TEXT TEXT text text text text".to_string()
+fn get_rooms_request() -> Vec<Room> {
+    match http::service::get_rooms() {
+        Ok(response) => response.rooms,
+        Err(err) => {
+            log::error!("{}", err);
+            vec![]
+        }
+    }
 }

@@ -14,7 +14,7 @@ mod session;
 mod util;
 mod ws;
 
-pub const SERVER_ADDR: &str = "127.0.0.1:8000";
+pub const SERVER_ADDR: &str = "127.0.0.1:3000";
 
 pub type GenericError = Box<dyn std::error::Error + Send + Sync>;
 pub type Result<T> = std::result::Result<T, GenericError>;

@@ -19,7 +19,7 @@ async fn main() {
 
     log::info!("Auth with user id: {}", user_id);
 
-    let url = url::Url::parse(format!("ws://127.0.0.1:8000/{}", user_id).as_str()).unwrap();
+    let url = url::Url::parse(format!("ws://127.0.0.1:3000/{}", user_id).as_str()).unwrap();
     let (stdin_tx, stdin_rx) = futures_channel::mpsc::unbounded();
     tokio::spawn(read_stdin(stdin_tx));
 

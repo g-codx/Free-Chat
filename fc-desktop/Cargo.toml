@@ -7,7 +7,10 @@ edition = "2021"
 [dependencies]
 eframe = "0.23.0"
 egui_extras = "0.23.0"
+reqwest = { version = "0.11.23", features = ["json", "blocking"] }
 
+serde = { workspace = true }
+serde_json = { workspace = true }
 thiserror = { workspace = true }
 log = { workspace = true }
 pretty_env_logger = { workspace = true }

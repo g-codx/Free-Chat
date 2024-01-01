@@ -21,7 +21,9 @@ pub async fn run() {
 
     let sessions = Sessions::new(RwLock::new(HashMap::new()));
     let poll = Arc::new(db_connection().await.unwrap());
-    let rooms = db::service::room::get_all_rooms_map(&poll).await.unwrap();
+    let rooms = db::service::room::get_all_rooms_map(poll.clone())
+        .await
+        .unwrap();
 
     loop {
         let (tcp, addr) = listener.accept().await.expect("Failed to accept");
@@ -58,6 +60,6 @@ async fn handle_request(
     if is_upgrade_req(&req) {
         crate::ws::handler::ws_handler(req, peer_addr, sessions, rooms, pool.clone()).await
     } else {
-        crate::http::handler::http_handler(req, pool.clone())
+        crate::http::handler::http_handler(req, pool.clone()).await
     }
 }

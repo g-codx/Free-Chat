@@ -32,15 +32,3 @@ impl User {
         Ok(user)
     }
 }
-
-#[tokio::test]
-async fn test() {
-    use crate::db::connection::db_connection_test;
-    let pool = db_connection_test().await.unwrap();
-    User::insert("MOM_HUNTER".to_string(), "MOM_HUNTER".to_string(), &pool)
-        .await
-        .unwrap();
-
-    let user = User::find_by_id(2, &pool).await.unwrap();
-    dbg!("{:?}", user);
-}
