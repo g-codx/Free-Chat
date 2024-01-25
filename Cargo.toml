@@ -2,6 +2,11 @@
 members = ["fc-server", "fc-command", "fc-desktop"]
 
 [workspace.dependencies]
+tokio = { version = "1.33.0", default-features = false, features = ["io-std", "macros", "rt-multi-thread"] }
+tokio-tungstenite = "0.20.1"
+futures-channel = "0.3.28"
+futures = "0.3.28"
+url = "2.4.1"
 serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.108"
 bincode = "2.0.0-rc.3"

@@ -1,5 +1,6 @@
 use crate::db::entity::message::Message;
-use crate::util::server::{full, internal_server_error, missing_parameters, not_found, numeric};
+use crate::http::json::message::MessagesResponse;
+use crate::util::server::{full, missing_parameters, numeric};
 use crate::{db, BoxBody};
 use hyper::{Request, Response, StatusCode};
 use sqlx::SqlitePool;
@@ -31,13 +32,11 @@ pub async fn get_messages(
         return missing_parameters();
     };
 
-    match db::service::message::get_messages(room_id, &pool).await {
-        Ok(resposne) => {
-            todo!()
-        }
-        Err(err) => {
-            log::error!("{}", err);
-            internal_server_error()
-        }
-    }
+    let messages = MessagesResponse::from(Message::find_by_room_id(room_id, &pool).await?);
+    let json = serde_json::to_string(&messages)?;
+
+    Ok(Response::builder()
+        .status(StatusCode::OK)
+        .body(full(json))
+        .unwrap())
 }

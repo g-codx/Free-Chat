@@ -64,7 +64,7 @@ pub async fn remove_user_from_room(
     pool: &SqlitePool,
 ) -> anyhow::Result<()> {
     match Room::find_by_id(room_id, pool).await? {
-        None => return Err(Error::from(error::Error::RoomNotFound { room_id })),
+        None => Err(Error::from(error::Error::RoomNotFound { room_id })),
         Some(room) => {
             let mut user_ids = if room.user_ids.is_empty() {
                 return Ok(());
@@ -82,4 +82,23 @@ pub async fn remove_user_from_room(
             Ok(())
         }
     }
+}
+
+pub async fn get_user_rooms(user_id: i64, pool: &SqlitePool) -> anyhow::Result<Vec<Room>> {
+    Ok(Room::find_all(pool)
+        .await?
+        .into_iter()
+        .map(|r| {
+            (
+                split_as_i64_set(r.user_ids.clone(), ',').unwrap_or_default(),
+                r,
+            )
+        })
+        .filter(|(set, _)| {
+            dbg!("{}", set);
+            dbg!("{}", set.contains(&user_id));
+            set.contains(&user_id)
+        })
+        .map(|(_, r)| r)
+        .collect())
 }

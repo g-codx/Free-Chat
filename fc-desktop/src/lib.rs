@@ -1,5 +1,7 @@
 pub mod app;
 pub mod core;
-pub mod http;
-mod ws;
 mod error;
+pub mod http;
+pub mod ws;
+
+pub type WsMessage = tokio_tungstenite::tungstenite::Message;

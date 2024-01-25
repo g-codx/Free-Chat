@@ -5,7 +5,7 @@ use sqlx::SqlitePool;
 
 //cargo install sqlx-cli
 
-//cd server
+//cd fc-server
 //sqlx db create --database-url sqlite://fc.db
 //sqlx migrate run --database-url sqlite://fc.db
 

@@ -1,6 +1,7 @@
+use serde::Serialize;
 use sqlx::{FromRow, SqlitePool};
 
-#[derive(FromRow, Clone, Debug)]
+#[derive(FromRow, Serialize, Clone, Debug)]
 pub struct Message {
     id: i64,
     user_id: i64,
@@ -32,7 +33,7 @@ impl Message {
 
     pub async fn find_by_room_id(room_id: i64, pool: &SqlitePool) -> anyhow::Result<Vec<Message>> {
         let messages = sqlx::query_as(
-            "select id, user_id, room_id, content, creat_at from message where room_id = ?",
+            "select id, user_id, room_id, content, created_at from message where room_id = ?",
         )
         .bind(room_id)
         .fetch_all(pool)

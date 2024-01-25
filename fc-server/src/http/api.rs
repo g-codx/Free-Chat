@@ -15,6 +15,7 @@ pub async fn handler(
 
     match (req.method(), req.uri().path()) {
         (&Method::GET, "/room") => room::get::get_rooms(pool.clone()).await,
+        (&Method::GET, "/user-room") => room::get::get_user_rooms(&req, pool.clone()).await,
         (&Method::GET, "/message") => message::get::get_messages(&req, pool.clone()).await,
         _ => not_found(),
     }
